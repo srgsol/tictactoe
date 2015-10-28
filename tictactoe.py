@@ -1,13 +1,27 @@
+"""
+Tic Tac Toe AI game
+
+The Tic Tac Toe game(http://en.wikipedia.org/wiki/Tic-tac-toe), is an 
+adversarial game(http://www.cs.sfu.ca/CourseCentral/310/oschulte/mychapter5.pdf)
+which can be modeled with a game tree(http://en.wikipedia.org/wiki/Game_tree) 
+and can be solved with the minimax algorithm(http://www.cs.berkeley.edu/~kamil/teaching/sp03/minimax.pdf). 
+It is aslo worth to see the game complexity(http://en.wikipedia.org/wiki/Game_complexity)
+
+Joshua Eckroth is the author of the minimax algorithm implementation an all this
+materials are licensed under Creative Commons Attribution-ShareAlike 3.0 Unported License 
+http://creativecommons.org/licenses/by-sa/3.0/
+
+Sergi Soler i Segura
+"""
 import sys
 import copy
 from pprint import pprint
 
 
 s0 = [[' ',' ',' '],[' ',' ',' '],[' ',' ',' ']]
-ssample = [['0','1','2'],['3','4','5'],['6','7','8']]
+
 
 def minimax(state):
-    #import pdb; pdb.set_trace()
     max_trans = None
     max_u = None
     transitions = possible_transitions(state, 'x')
@@ -26,7 +40,6 @@ def minimax(state):
     return max_trans
 
 def min_utility(state, player):
-    #print 'min_utility'
     # if the current state is a win/loss/tie, stop searching
     if is_winning(state, player) or \
             is_winning(state, switch_player(player)) or \
@@ -45,7 +58,6 @@ def min_utility(state, player):
         return min_u
 
 def max_utility(state, player):
-    #print 'max_utility'
     # if the current state is a win/loss/tie, stop searching
     if is_winning(state, player) or \
             is_winning(state, switch_player(player)) or \
@@ -76,7 +88,6 @@ def possible_transitions(state, player):
                 nextstates[trans] = newstate
             trans += 1
     return nextstates
-
 
 def switch_player(player):
     if player == 'x': return 'o'
@@ -116,6 +127,7 @@ def move (state, pos, player):
     if 5 < pos: i = 2; j = pos - 6;
     if state[i][j] != ' ':
         print 'Invalid move'
+        raise Exception
     else:
         state[i][j] = player; 
 
@@ -128,45 +140,12 @@ def print_board(state):
             else: print ''
         if i < 2:
             print '---------'
-
-    print
-    print
+    print 2 * '\n'
     return
 
 def main():
     state = copy.deepcopy(s0)
-    print_board(ssample)
-    player = 'o'
-
-    while True:
-        pos = raw_input("Your turn: ")
-        move(state, int(pos), player)
-        print_board(state)
-        if is_winning(state, player):
-            print 'You win!'
-            break
-        if is_tie(state):
-            print 'Game over. Ties'
-            break
-        player = switch_player(player)
-
-        print("A.I. turn... ")
-        pos = minimax(state)
-        move(state, int(pos), player)
-        print_board(state)
-        if is_winning(state, player):
-            print 'A.I. win!'
-            break
-        if is_tie(state):
-            print 'Game over. Tie.'
-            break
-        player = switch_player(player)
-
-    return
-        
-def main2():
-    state = copy.deepcopy(s0)
-    print_board(ssample)
+    print_board([['0','1','2'],['3','4','5'],['6','7','8']])
     player = raw_input("Who starts the game? You or A.I.? [Y|A]:")
     if player in ['Y', 'y']: 
         player = 'o'
@@ -176,7 +155,6 @@ def main2():
         print '?'
         sys.exit()
 
-
     while True:
         if player == 'o':
             pos = raw_input("Your turn: ")
@@ -184,7 +162,13 @@ def main2():
             print("A.I. turn... ")
             pos = minimax(state)
 
-        move(state, int(pos), player)
+        try:
+            move(state, int(pos) , player)
+        except:
+            # if invalid move, do not check for 
+            # game over and do not switch player.
+            continue
+
         print_board(state)
         if is_winning(state, player):
             print 'Player', player, 'win!'
@@ -197,4 +181,4 @@ def main2():
     return
         
 if __name__ == '__main__':
-    main2()
+    main()
