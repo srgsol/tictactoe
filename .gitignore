@@ -1,0 +1,35 @@
+# Secrets folder
+secrets/
+
+# Log folder
+log/
+
+# Data folder.
+data/
+
+# Pacakge distribution folder.
+dist/
+
+# eggs: pip install --editable
+*egg-info/
+
+# ipython backup folders
+.ipynb_checkpoints
+
+# Python cache.
+__pycache__/
+*.pyc
+
+# Pycharm config.
+.idea/
+
+# pytest test framework
+.pytest_cache
+.coverage
+coverage.xml
+
+# Vim swap file.
+*.swp
+
+# Mac stuff
+.DS_Store
